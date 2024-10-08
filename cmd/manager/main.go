@@ -415,7 +415,7 @@ func doRun(_ *cobra.Command, _ []string) error {
 			log.Info("Shutting down due to signal")
 			return nil
 		case <-confUpdateChan: // config file updated
-			log.Info("Shutting down to apply updated configuration")
+			log.Info("Shutting down to apply updated configuration", "watchedFiles", toWatch, "caDir", caDir)
 			return nil
 		}
 	}
