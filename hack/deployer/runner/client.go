@@ -97,7 +97,7 @@ func dockerLogin(client vault.Client) error {
 				return err
 			}
 			if bytes.Contains(b, []byte(dockerRegistry)) {
-				log.Printf("Skip docker login as %s already exists in %s", dockerRegistry, dockerConfig)
+				log.Info("Skip docker login as registry already exists in config", zap.String("dockerRegistry", dockerRegistry), zap.String("dockerConfig", dockerConfig), zap.String("homeDir", homeDir))
 				return nil
 			}
 		}
