@@ -90,11 +90,11 @@ func (d *AKSDriver) Execute() error {
 				return err
 			}
 		} else {
-			log.Printf("not deleting as cluster doesn't exist")
+			d.logger.Info("Not deleting cluster as it doesn't exist", zap.String("operation", string(d.plan.Operation)), zap.Bool("clusterExists", exists))
 		}
 	case CreateAction:
 		if exists {
-			log.Printf("not creating as cluster exists")
+			d.logger.Info("Not creating cluster as it already exists", zap.String("operation", string(d.plan.Operation)), zap.String("clusterName", d.plan.ClusterName), zap.Bool("exists", exists))
 		} else if err := d.create(); err != nil {
 			return err
 		}
@@ -118,7 +118,7 @@ func (d *AKSDriver) Execute() error {
 
 func (d *AKSDriver) auth() error {
 	if d.plan.ServiceAccount {
-		log.Print("Authenticating as service account...")
+		log.Info("Authenticating as service account...")
 		credentials, err := azure.NewCredentials(d.vaultClient)
 		if err != nil {
 			return fmt.Errorf("while getting new credentials: %w", err)
@@ -130,12 +130,12 @@ func (d *AKSDriver) auth() error {
 		return nil
 	}
 
-	log.Print("Authenticating as user...")
+	log.Info("Authenticating as user...")
 	return exec.NewCommand("az login").Run()
 }
 
 func (d *AKSDriver) clusterExists() (bool, error) {
-	log.Print("Checking if cluster exists...")
+	log.Info("Checking if cluster exists...")
 
 	cmd := azure.Cmd("aks", "show", "--name", d.plan.ClusterName, "--resource-group", d.plan.Aks.ResourceGroup)
 	contains, err := cmd.WithoutStreaming().OutputContainsAny("not be found", "was not found")
