@@ -428,7 +428,7 @@ func startOperator(ctx context.Context) error {
 	_, err := maxprocs.Set(maxprocs.Logger(func(s string, i ...interface{}) {
 		// maxprocs needs an sprintf format string with args, but our logger needs a string with optional key value pairs,
 		// so we need to do this translation
-		log.Info(fmt.Sprintf(s, i...))
+		log.Info(s, "args", i)
 	}))
 	if err != nil {
 		log.Error(err, "Error setting GOMAXPROCS")
