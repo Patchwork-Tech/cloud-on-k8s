@@ -35,7 +35,7 @@ func GetCommand() *cobra.Command {
 				return err
 			}
 
-			fmt.Println(plan.ClusterName)
+			log.Info(plan.ClusterName)
 			return nil
 		},
 	}
