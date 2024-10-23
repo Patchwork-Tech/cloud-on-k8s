@@ -464,7 +464,7 @@ func startOperator(ctx context.Context) error {
 			}()
 
 			if err := pprofServer.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-				log.Error(err, "Failed to start debug HTTP server")
+				log.Error("Failed to start debug HTTP server", zap.Error(err), zap.String("addr", pprofServer.Addr))
 				panic(err)
 			}
 		}()
