@@ -94,7 +94,7 @@ func (d *AKSDriver) Execute() error {
 		}
 	case CreateAction:
 		if exists {
-			log.Printf("not creating as cluster exists")
+			d.logger.Info("Skipping cluster creation as it already exists", zap.Bool("clusterExists", exists), zap.String("operation", d.plan.Operation))
 		} else if err := d.create(); err != nil {
 			return err
 		}
