@@ -400,7 +400,7 @@ func doRun(_ *cobra.Command, _ []string) error {
 	go func() {
 		err := startOperator(ctx)
 		if err != nil {
-			log.Error(err, "Operator stopped with error")
+			log.Error("Operator stopped with error", zap.Error(err), zap.Strings("watchedFiles", toWatch), zap.String("caDir", caDir))
 		}
 		errChan <- err
 	}()
@@ -409,13 +409,13 @@ func doRun(_ *cobra.Command, _ []string) error {
 	for {
 		select {
 		case err := <-errChan: // operator failed
-			log.Error(err, "Shutting down due to error")
+			log.Error("Shutting down due to error", zap.Error(err), zap.String("caDir", caDir), zap.Strings("watchedFiles", toWatch))
 			return err
 		case <-ctx.Done(): // signal received
 			log.Info("Shutting down due to signal")
 			return nil
 		case <-confUpdateChan: // config file updated
-			log.Info("Shutting down to apply updated configuration")
+			log.Info("Shutting down to apply updated configuration", zap.Strings("watchedFiles", toWatch), zap.String("caDir", caDir))
 			return nil
 		}
 	}
@@ -428,7 +428,7 @@ func startOperator(ctx context.Context) error {
 	_, err := maxprocs.Set(maxprocs.Logger(func(s string, i ...interface{}) {
 		// maxprocs needs an sprintf format string with args, but our logger needs a string with optional key value pairs,
 		// so we need to do this translation
-		log.Info(fmt.Sprintf(s, i...))
+		log.Info(s, "args", i)
 	}))
 	if err != nil {
 		log.Error(err, "Error setting GOMAXPROCS")
@@ -459,12 +459,12 @@ func startOperator(ctx context.Context) error {
 				defer cancelFunc()
 
 				if err := pprofServer.Shutdown(ctx); err != nil {
-					log.Error(err, "Failed to shutdown debug HTTP server")
+					log.Error("Failed to shutdown debug HTTP server", zap.Error(err), zap.String("addr", pprofServer.Addr))
 				}
 			}()
 
 			if err := pprofServer.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-				log.Error(err, "Failed to start debug HTTP server")
+				log.Error("Failed to start debug HTTP server", zap.Error(err), zap.String("addr", pprofServer.Addr))
 				panic(err)
 			}
 		}()
