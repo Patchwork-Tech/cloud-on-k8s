@@ -118,7 +118,7 @@ func (d *AKSDriver) Execute() error {
 
 func (d *AKSDriver) auth() error {
 	if d.plan.ServiceAccount {
-		log.Print("Authenticating as service account...")
+		log.Info("Authenticating as service account...")
 		credentials, err := azure.NewCredentials(d.vaultClient)
 		if err != nil {
 			return fmt.Errorf("while getting new credentials: %w", err)
