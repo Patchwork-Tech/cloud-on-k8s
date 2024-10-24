@@ -90,7 +90,7 @@ func (d *AKSDriver) Execute() error {
 				return err
 			}
 		} else {
-			log.Printf("not deleting as cluster doesn't exist")
+			d.logger.Info("Skipping cluster deletion", zap.Bool("clusterExists", exists), zap.String("clusterName", d.plan.ClusterName))
 		}
 	case CreateAction:
 		if exists {
