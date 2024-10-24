@@ -133,7 +133,7 @@ func (c *Command) output() (string, error) {
 	}
 
 	if c.logPrefix != "" {
-		log.Printf("%s: %s", c.logPrefix, c.command)
+		log.Info(c.command, zap.String("logPrefix", c.logPrefix))
 	}
 
 	var cmd *exec.Cmd
