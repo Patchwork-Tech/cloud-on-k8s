@@ -400,7 +400,7 @@ func doRun(_ *cobra.Command, _ []string) error {
 	go func() {
 		err := startOperator(ctx)
 		if err != nil {
-			log.Error(err, "Operator stopped with error")
+			log.Error("Operator stopped with error", zap.Error(err), zap.Strings("watchedFiles", toWatch), zap.String("caDir", caDir))
 		}
 		errChan <- err
 	}()
@@ -409,13 +409,13 @@ func doRun(_ *cobra.Command, _ []string) error {
 	for {
 		select {
 		case err := <-errChan: // operator failed
-			log.Error(err, "Shutting down due to error")
+			log.Error("Shutting down due to error", zap.Error(err), zap.Strings("watchedFiles", toWatch), zap.String("caDir", caDir))
 			return err
 		case <-ctx.Done(): // signal received
 			log.Info("Shutting down due to signal")
 			return nil
 		case <-confUpdateChan: // config file updated
-			log.Info("Shutting down to apply updated configuration")
+			log.Info("Shutting down to apply updated configuration", zap.Strings("watchedFiles", toWatch), zap.String("caDir", caDir))
 			return nil
 		}
 	}
