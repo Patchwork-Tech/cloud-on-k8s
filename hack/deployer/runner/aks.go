@@ -130,7 +130,7 @@ func (d *AKSDriver) auth() error {
 		return nil
 	}
 
-	log.Print("Authenticating as user...")
+	log.Info("Authenticating as user...")
 	return exec.NewCommand("az login").Run()
 }
 
