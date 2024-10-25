@@ -24,7 +24,7 @@ func Execute() {
 	rootCmd.AddCommand(CleanupCommand())
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		log.Error("Failed to execute root command", zap.Error(err))
 		os.Exit(1)
 	}
 }
