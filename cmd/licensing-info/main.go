@@ -50,7 +50,7 @@ func main() {
 		log.Fatal(err, "Failed to marshal licensing info")
 	}
 
-	fmt.Print(string(bytes))
+	log.Info(string(bytes))
 }
 
 func newK8sClient() client.Client {
