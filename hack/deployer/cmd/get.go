@@ -77,7 +77,7 @@ func GetCommand() *cobra.Command {
 				return err
 			}
 
-			fmt.Println(string(planYaml))
+			log.Info("Cluster configuration", zap.String("config", string(planYaml)))
 			return nil
 		},
 	}
