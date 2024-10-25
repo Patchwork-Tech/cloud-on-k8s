@@ -409,7 +409,7 @@ func doRun(_ *cobra.Command, _ []string) error {
 	for {
 		select {
 		case err := <-errChan: // operator failed
-			log.Error(err, "Shutting down due to error")
+			log.Error("Shutting down due to error", zap.Error(err), zap.Strings("watchedFiles", toWatch), zap.String("caDir", caDir))
 			return err
 		case <-ctx.Done(): // signal received
 			log.Info("Shutting down due to signal")
