@@ -459,7 +459,7 @@ func startOperator(ctx context.Context) error {
 				defer cancelFunc()
 
 				if err := pprofServer.Shutdown(ctx); err != nil {
-					log.Error(err, "Failed to shutdown debug HTTP server")
+					log.Error("Failed to shutdown debug HTTP server", zap.Error(err), zap.String("addr", pprofServer.Addr))
 				}
 			}()
 
