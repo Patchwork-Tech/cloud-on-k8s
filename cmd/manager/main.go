@@ -400,7 +400,7 @@ func doRun(_ *cobra.Command, _ []string) error {
 	go func() {
 		err := startOperator(ctx)
 		if err != nil {
-			log.Error(err, "Operator stopped with error")
+			log.Error("Operator stopped with error", zap.Error(err), zap.Strings("watchedFiles", toWatch), zap.String("caDir", caDir))
 		}
 		errChan <- err
 	}()
