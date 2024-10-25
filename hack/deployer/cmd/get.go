@@ -77,7 +77,8 @@ func GetCommand() *cobra.Command {
 				return err
 			}
 
-			fmt.Println(string(planYaml))
+			log.Info("Configuration output", zap.String("plansFile", *plansFile), zap.String("configFile", *configFile))
+fmt.Println(string(planYaml))
 			return nil
 		},
 	}
