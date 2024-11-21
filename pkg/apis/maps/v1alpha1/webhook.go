@@ -74,7 +74,7 @@ func (m *ElasticMapsServer) validate() (admission.Warnings, error) {
 	}
 
 	if len(errors) > 0 {
-		validationLog.V(1).Info("failed validation", "errors", errors)
+		validationLog.V(1).Info("failed validation", "errors", errors, "ElasticMapsServer Name", m.Name, "ElasticMapsServer Namespace", m.Namespace)
 		return nil, apierrors.NewInvalid(groupKind, m.Name, errors)
 	}
 	return nil, nil
